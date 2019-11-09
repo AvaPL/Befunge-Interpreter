@@ -69,8 +69,10 @@ public class BefungeInterpreter {
                 setRandomDirection();
                 return true;
             case '_':
+                popAndMoveHorizontally();
                 return true;
             case '|':
+                popAndMoveVertically();
                 return true;
             case '"':
                 isStringMode = !isStringMode;
@@ -91,10 +93,13 @@ public class BefungeInterpreter {
                 outputAsAscii();
                 return true;
             case '#':
+                //TODO: Implement.
                 return true;
             case 'p':
+                //TODO: Implement.
                 return true;
             case 'g':
+                //TODO: Implement.
                 return true;
             case '@':
                 return false;
@@ -172,6 +177,16 @@ public class BefungeInterpreter {
     private void setRandomDirection() {
         CodePointer.Direction direction = RandomEnum.of(CodePointer.Direction.class);
         codePointer.setDirection(direction);
+    }
+
+    private void popAndMoveHorizontally() {
+        int value = stack.pop();
+        codePointer.setDirection(value == 0 ? CodePointer.Direction.RIGHT : CodePointer.Direction.LEFT);
+    }
+
+    private void popAndMoveVertically() {
+        int value = stack.pop();
+        codePointer.setDirection(value == 0 ? CodePointer.Direction.DOWN : CodePointer.Direction.UP);
     }
 
     private void pushIfDigit(char character) {
