@@ -1,24 +1,24 @@
-import java.awt.*;
 import java.util.Stack;
 
 public class BefungeInterpreter {
 
     private final Stack<Integer> stack = new Stack<>();
 
-    private char[] code;
-    private Point codePointer = new Point(0, 0);
+    private CodeArray codeArray;
+    private CodePointer codePointer;
     private boolean isStringMode = false;
     private StringBuilder output = new StringBuilder();
 
     public String run(String code) {
-        this.code = code.toCharArray();
+        codeArray = CodeArray.of(code);
+        codePointer = new CodePointer(codeArray.getColumnsNumber(), codeArray.getRowsNumber());
         while (interpretCharacter())
-            ++codePointer.x;
+            codePointer.increment();
         return output.toString();
     }
 
     private boolean interpretCharacter() {
-        char character = code[codePointer.x];
+        char character = codeArray.charAt(codePointer);
         return isStringMode ? interpretAsAscii(character) : interpretCommand(character);
     }
 
@@ -54,14 +54,19 @@ public class BefungeInterpreter {
                 greaterThan();
                 return true;
             case '>':
+                codePointer.setDirection(CodePointer.Direction.RIGHT);
                 return true;
             case '<':
+                codePointer.setDirection(CodePointer.Direction.LEFT);
                 return true;
             case '^':
+                codePointer.setDirection(CodePointer.Direction.UP);
                 return true;
             case 'v':
+                codePointer.setDirection(CodePointer.Direction.DOWN);
                 return true;
             case '?':
+                setRandomDirection();
                 return true;
             case '_':
                 return true;
@@ -164,7 +169,10 @@ public class BefungeInterpreter {
         output.append(character);
     }
 
-    //-------------------------------------------------------
+    private void setRandomDirection() {
+        CodePointer.Direction direction = RandomEnum.of(CodePointer.Direction.class);
+        codePointer.setDirection(direction);
+    }
 
     private void pushIfDigit(char character) {
         if (Character.isDigit(character))
