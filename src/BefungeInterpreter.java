@@ -1,3 +1,4 @@
+import java.util.Scanner;
 import java.util.Stack;
 
 public class BefungeInterpreter {
@@ -8,6 +9,16 @@ public class BefungeInterpreter {
     private CodePointer codePointer;
     private boolean isStringMode = false;
     private StringBuilder output = new StringBuilder();
+    private Scanner input = new Scanner("");
+
+    public String run(String code, String input) {
+        setInput(input);
+        return run(code);
+    }
+
+    public void setInput(String input) {
+        this.input = new Scanner(input);
+    }
 
     public String run(String code) {
         setCode(code);
@@ -109,6 +120,12 @@ public class BefungeInterpreter {
             case 'g':
                 getCommand();
                 return true;
+            case '&':
+                inputAsInt();
+                return true;
+            case '~':
+                inputAsAscii();
+                return true;
             case '@':
                 return false;
             default:
@@ -176,15 +193,14 @@ public class BefungeInterpreter {
     }
 
     private void outputAsInt() {
-        /*TODO: According to language specification int should be followed by space.
-        *       It isn't respected in Codewars kata, will be fixed later.*/
-        String integer = pop().toString();
+        String integer = pop().toString() + ' ';
         output.append(integer);
     }
 
     private void outputAsAscii() {
         char character = (char) pop().intValue();
-        output.append(character);
+        if (character != '\0')
+            output.append(character);
     }
 
     private void setRandomDirection() {
@@ -216,6 +232,16 @@ public class BefungeInterpreter {
         stack.push((int) command);
     }
 
+    private void inputAsInt() {
+        while (input.hasNext() && !input.hasNextInt())
+            input.next();
+        stack.push(input.hasNextInt() ? input.nextInt() : 0);
+    }
+
+    private void inputAsAscii() {
+        stack.push(input.hasNext() ? (int) input.next().charAt(0) : -1);
+    }
+
     private void pushIfDigit(char character) {
         if (Character.isDigit(character))
             stack.push(Character.getNumericValue(character));
@@ -232,6 +258,7 @@ public class BefungeInterpreter {
         codePointer.setLocation(0, 0);
         isStringMode = false;
         output.setLength(0);
+        input = new Scanner("");
     }
 
     public Stack<Integer> getStack() {

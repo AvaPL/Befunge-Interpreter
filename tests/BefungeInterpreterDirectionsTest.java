@@ -78,7 +78,7 @@ class BefungeInterpreterDirectionsTest {
         >2^ @
         */
         String output = runWithTimeout("v>5*v\n ^>+\n3   .\n>2^ @");
-        assertEquals("25", output);
+        assertEquals("25 ", output);
     }
 
     @Test
