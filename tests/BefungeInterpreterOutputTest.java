@@ -23,31 +23,31 @@ class BefungeInterpreterOutputTest {
     @Test
     void shouldPopAndOutputSingleValue() {
         String output = interpreter.run("5.@");
-        assertEquals("5", output);
+        assertEquals("5 ", output);
     }
 
     @Test
     void shouldOutput0ForEmptyStack() {
         String output = interpreter.run(".@");
-        assertEquals("0", output);
+        assertEquals("0 ", output);
     }
 
     @Test
     void shouldPopAndOutputMultipleValues() {
         String output = interpreter.run("12345.....@");
-        assertEquals("54321", output);
+        assertEquals("5 4 3 2 1 ", output);
     }
 
     @Test
     void shouldOutputIntWithTwoDigits() {
         String output = interpreter.run("99+.@");
-        assertEquals("18", output);
+        assertEquals("18 ", output);
     }
 
     @Test
     void shouldOutputCharAsInt() {
         String output = interpreter.run("\"a\".@");
-        assertEquals(String.valueOf((int) 'a'), output);
+        assertEquals(String.valueOf((int) 'a') + ' ', output);
     }
 
     @Test

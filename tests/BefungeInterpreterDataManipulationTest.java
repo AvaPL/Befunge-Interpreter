@@ -138,6 +138,22 @@ class BefungeInterpreterDataManipulationTest {
     }
 
     @Test
+    void shouldPush0ForCommandInNonexistentColumn() {
+        interpreter.run("90g@");
+        Stack<Integer> stack = interpreter.getStack();
+        assertEquals(1, stack.size());
+        assertEquals('\0', stack.peek());
+    }
+
+    @Test
+    void shouldPush0ForCommandInNonexistentRow() {
+        interpreter.run("09g@");
+        Stack<Integer> stack = interpreter.getStack();
+        assertEquals(1, stack.size());
+        assertEquals('\0', stack.peek());
+    }
+
+    @Test
     void shouldGetGetCommandForEmptyStack() {
         interpreter.run("g@");
         Stack<Integer> stack = interpreter.getStack();

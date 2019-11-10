@@ -176,15 +176,14 @@ public class BefungeInterpreter {
     }
 
     private void outputAsInt() {
-        /*TODO: According to language specification int should be followed by space.
-        *       It isn't respected in Codewars kata, will be fixed later.*/
-        String integer = pop().toString();
+        String integer = pop().toString() + ' ';
         output.append(integer);
     }
 
     private void outputAsAscii() {
         char character = (char) pop().intValue();
-        output.append(character);
+        if (character != '\0')
+            output.append(character);
     }
 
     private void setRandomDirection() {

@@ -29,10 +29,11 @@ public class CodeArray {
     }
 
     public char getCharAt(int row, int column) {
+        if (row >= getRowsNumber() || column >= getColumnsNumber()) return '\0';
         return array[row][column];
     }
 
-    public void setCharAt(CodePointer codePointer, char character){
+    public void setCharAt(CodePointer codePointer, char character) {
         int column = codePointer.x;
         int row = codePointer.y;
         setCharAt(row, column, character);

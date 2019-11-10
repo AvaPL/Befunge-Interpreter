@@ -15,7 +15,7 @@ class BefungeInterpreterProgramsTest {
     @Test
     void shouldRunOnceWithoutReset() {
         String output = interpreter.run("1.@");
-        assertEquals("1", output);
+        assertEquals("1 ", output);
         output = interpreter.run();
         assertEquals("", output);
     }
@@ -23,62 +23,62 @@ class BefungeInterpreterProgramsTest {
     @Test
     void shouldRunTwiceWithReset() {
         String output = interpreter.run("1.@");
-        assertEquals("1", output);
+        assertEquals("1 ", output);
         interpreter.reset();
         output = interpreter.run();
-        assertEquals("1", output);
+        assertEquals("1 ", output);
     }
 
     @Test
     void shouldRunTwiceWithoutReset() {
         String output = interpreter.run("1.@");
-        assertEquals("1", output);
+        assertEquals("1 ", output);
         output = interpreter.run("2.@");
-        assertEquals("2", output);
+        assertEquals("2 ", output);
     }
 
     @Test
     void shouldRunTwiceWithoutResetWithSetCode() {
         String output = interpreter.run("1.@");
-        assertEquals("1", output);
+        assertEquals("1 ", output);
         interpreter.setCode("2.@");
         output = interpreter.run();
-        assertEquals("2", output);
+        assertEquals("2 ", output);
     }
 
     @Test
     void shouldRunTwiceWithDifferentCodeWithReset() {
         String output = interpreter.run("1.@");
-        assertEquals("1", output);
+        assertEquals("1 ", output);
         interpreter.reset();
         output = interpreter.run("2.@");
-        assertEquals("2", output);
+        assertEquals("2 ", output);
     }
 
     @Test
     void shouldRunTwiceWithResetAndSetCode() {
         String output = interpreter.run("1.@");
-        assertEquals("1", output);
+        assertEquals("1 ", output);
         interpreter.reset();
         interpreter.setCode("2.@");
         output = interpreter.run();
-        assertEquals("2", output);
+        assertEquals("2 ", output);
     }
 
     @Test
     void shouldPreserveStackWithoutReset() {
         String output = interpreter.run("143.@");
-        assertEquals("3", output);
+        assertEquals("3 ", output);
         interpreter.setCode("+.@");
         output = interpreter.run();
-        assertEquals("5", output);
+        assertEquals("5 ", output);
     }
 
     @Test
     void shouldOutputContinuousDigits() {
         //Source: https://www.codewars.com/kata/526c7b931666d07889000a3c/train/java
         String output = interpreter.run(">987v>.v\nv456<  :\n>321 ^ _@");
-        assertEquals("123456789", output);
+        assertEquals("1 2 3 4 5 6 7 8 9 ", output);
     }
 
     @Test
@@ -115,7 +115,7 @@ class BefungeInterpreterProgramsTest {
                                         " |!`\"O\":+1_:.:03p>03g+:\"O\"`|\n" +
                                         " @               ^  p3\\\" \":<\n" +
                                         "2 234567890123456789012345678901234567890123456789012345678901234567890123456789");
-        assertEquals("2357111317192329313741434753596167717379", output);
+        assertEquals("2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 ", output);
     }
 
     @Test
@@ -123,5 +123,12 @@ class BefungeInterpreterProgramsTest {
         //Source: https://esolangs.org/wiki/Befunge
         String output = interpreter.run("01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@");
         assertEquals("01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@", output);
+    }
+
+    @Test
+    void shouldCopyItselfToOutput3() {
+        //Source: https://esolangs.org/wiki/Befunge
+        String output = interpreter.run(":0g,:\"~\"`#@_1+0\"Quines are Fun\">_");
+        assertEquals(":0g,:\"~\"`#@_1+0\"Quines are Fun\">_", output);
     }
 }
