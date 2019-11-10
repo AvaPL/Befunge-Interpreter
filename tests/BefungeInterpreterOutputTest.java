@@ -27,6 +27,12 @@ class BefungeInterpreterOutputTest {
     }
 
     @Test
+    void shouldOutput0ForEmptyStack() {
+        String output = interpreter.run(".@");
+        assertEquals("0", output);
+    }
+
+    @Test
     void shouldPopAndOutputMultipleValues() {
         String output = interpreter.run("12345.....@");
         assertEquals("54321", output);
@@ -48,6 +54,12 @@ class BefungeInterpreterOutputTest {
     void shouldOutputAsciiCharacter() {
         String output = interpreter.run("\"a\",@");
         assertEquals("a", output);
+    }
+
+    @Test
+    void shouldOutputNullAsciiCharacterForEmptyStack() {
+        String output = interpreter.run(",@");
+        assertEquals("\0", output);
     }
 
     @Test

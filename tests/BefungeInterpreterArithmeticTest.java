@@ -25,6 +25,18 @@ class BefungeInterpreterArithmeticTest {
     }
 
     @Test
+    void shouldPush0ForAddOnEmptyStack() {
+        interpreter.run("+@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPushElementForAddOnSingleElement() {
+        interpreter.run("5+@");
+        assertEquals(5, interpreter.getStack().peek());
+    }
+
+    @Test
     void shouldSubtractTwoDigits() {
         interpreter.run("43-@");
         assertEquals(1, interpreter.getStack().peek());
@@ -37,6 +49,18 @@ class BefungeInterpreterArithmeticTest {
     }
 
     @Test
+    void shouldPush0ForSubtractOnEmptyStack() {
+        interpreter.run("-@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPushMinusElementForSubtractOnSingleElement() {
+        interpreter.run("5-@");
+        assertEquals(-5, interpreter.getStack().peek());
+    }
+
+    @Test
     void shouldMultiplyTwoDigits() {
         interpreter.run("43*@");
         assertEquals(12, interpreter.getStack().peek());
@@ -46,6 +70,18 @@ class BefungeInterpreterArithmeticTest {
     void shouldMultiplyFourDigits() {
         interpreter.run("1234***@");
         assertEquals(24, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForMultiplyOnEmptyStack() {
+        interpreter.run("*@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForMultiplyOnSingleElement() {
+        interpreter.run("5*@");
+        assertEquals(0, interpreter.getStack().peek());
     }
 
     @Test
@@ -73,6 +109,18 @@ class BefungeInterpreterArithmeticTest {
     }
 
     @Test
+    void shouldPush0ForDivisionOnEmptyStack() {
+        interpreter.run("/@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForDivisionOnSingleElement() {
+        interpreter.run("5/@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
     void shouldModuloTwoDigits() {
         interpreter.run("43%@");
         assertEquals(1, interpreter.getStack().peek());
@@ -87,6 +135,18 @@ class BefungeInterpreterArithmeticTest {
     @Test
     void shouldPush0ForModulo0() {
         interpreter.run("50%@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForModuloOnEmptyStack() {
+        interpreter.run("%@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForModuloOnSingleElement() {
+        interpreter.run("5%@");
         assertEquals(0, interpreter.getStack().peek());
     }
 }

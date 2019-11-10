@@ -22,10 +22,24 @@ public class CodeArray {
         return codeArray;
     }
 
-    public char charAt(CodePointer codePointer) {
+    public char getCharAt(CodePointer codePointer) {
         int column = codePointer.x;
         int row = codePointer.y;
+        return getCharAt(row, column);
+    }
+
+    public char getCharAt(int row, int column) {
         return array[row][column];
+    }
+
+    public void setCharAt(CodePointer codePointer, char character){
+        int column = codePointer.x;
+        int row = codePointer.y;
+        setCharAt(row, column, character);
+    }
+
+    public void setCharAt(int row, int column, char character) {
+        array[row][column] = character;
     }
 
     public int getColumnsNumber() {

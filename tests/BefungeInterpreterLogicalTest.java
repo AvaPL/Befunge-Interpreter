@@ -25,6 +25,12 @@ class BefungeInterpreterLogicalTest {
     }
 
     @Test
+    void shouldPush1ForLogicalNotOnEmptyStack() {
+        interpreter.run("!@");
+        assertEquals(1, interpreter.getStack().peek());
+    }
+
+    @Test
     void shouldPush1For5GreaterThan1() {
         interpreter.run("51`@");
         assertEquals(1, interpreter.getStack().peek());
@@ -39,6 +45,18 @@ class BefungeInterpreterLogicalTest {
     @Test
     void shouldPush0ForEqualNumbers() {
         interpreter.run("11`@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForGreaterThanOnEmptyStack() {
+        interpreter.run("`@");
+        assertEquals(0, interpreter.getStack().peek());
+    }
+
+    @Test
+    void shouldPush0ForGreaterThanOnSingleElement() {
+        interpreter.run("5`@");
         assertEquals(0, interpreter.getStack().peek());
     }
 }

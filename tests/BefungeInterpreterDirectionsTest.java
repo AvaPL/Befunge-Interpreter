@@ -71,7 +71,7 @@ class BefungeInterpreterDirectionsTest {
 
     @Test
     void shouldOutputIntForOperationsWithWrapping() {
-        /* (3+2)*5
+        /* Result: (3+2)*5
         v>5*v
          ^>+
         3   .
@@ -104,6 +104,16 @@ class BefungeInterpreterDirectionsTest {
     }
 
     @Test
+    void shouldMoveRightForEmptyStack() {
+        /* Will end only by choosing right direction.
+         v
+        v_@
+        ^
+        */
+        runWithTimeout(" v\nv_@\n^");
+    }
+
+    @Test
     void shouldEndForVerticalDirectionChoosing() {
         /* Will end only by choosing right directions.
         v   @
@@ -113,5 +123,45 @@ class BefungeInterpreterDirectionsTest {
             <
         */
         runWithTimeout("v   @\n  <\n>0|\n  >1|\n    <");
+    }
+
+    @Test
+    void shouldMoveDownForEmptyStack() {
+        /* Will end only by choosing right direction.
+        v><
+        >|
+         @
+        */
+        runWithTimeout("v><\n>|\n @");
+    }
+
+    @Test
+    void shouldSkipCellWithTrampoline() {
+        /* Will end only by skipping cell.
+        #v@
+         ^
+        */
+        runWithTimeout("#v@\n ^");
+    }
+
+    @Test
+    void shouldSkipCellWithHorizontalWrapping(){
+        /* Will end only by skipping cell with horizontal wrap.
+          v
+        v@>#
+        ^ 
+        */
+        runWithTimeout("  v\nv@>#\n^");
+    }
+
+    @Test
+    void shouldSkipCellWithVerticalWrapping(){
+        /* Will end only by skipping cell with vertical wrap.
+        v#
+        >^
+         >@
+        ><
+        */
+        runWithTimeout("v#\n>^\n >@\n><");
     }
 }

@@ -1,9 +1,12 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.ThrowingSupplier;
 
+import java.time.Duration;
 import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 class BefungeInterpreterDataManipulationTest {
 
@@ -66,11 +69,12 @@ class BefungeInterpreterDataManipulationTest {
     }
 
     @Test
-    void shouldPut0ForEmptyStackDuplication() {
+    void shouldPutTwo0ForEmptyStackDuplication() {
         interpreter.run(":@");
         Stack<Integer> stack = interpreter.getStack();
-        assertEquals(1, stack.size());
-        assertEquals(0, stack.peek());
+        assertEquals(2, stack.size());
+        assertEquals(0, stack.pop());
+        assertEquals(0, stack.pop());
     }
 
     @Test
@@ -90,5 +94,54 @@ class BefungeInterpreterDataManipulationTest {
         assertEquals(2, stack.size());
         assertEquals(0, stack.pop());
         assertEquals(1, stack.pop());
+    }
+
+    @Test
+    void shouldPushTwo0ForSwapOnEmptyStack() {
+        interpreter.run("\\@");
+        Stack<Integer> stack = interpreter.getStack();
+        assertEquals(2, stack.size());
+        assertEquals(0, stack.pop());
+        assertEquals(0, stack.pop());
+    }
+
+    @Test
+    void shouldChangeCommandInCode() {
+        /* Will end only by changing > at (0, 8) to v.
+        835**2-11pv
+        ><        <
+         @
+        */
+        runWithTimeout("835**2-11pv\n><        <\n @");
+    }
+
+    private String runWithTimeout(String s) {
+        ThrowingSupplier<String> command = () -> interpreter.run(s);
+        return assertTimeoutPreemptively(Duration.ofSeconds(1), command);
+    }
+
+    @Test
+    void shouldChangeCommandToNullCharacterForEmptyStack() {
+        /* Will end only by changing v at (0, 3) to null character (comment).
+        30pv@
+           ^
+        */
+        runWithTimeout("30pv@\n   ^");
+    }
+
+    @Test
+    void shouldGetAsciiValueOfCommandInCode() {
+        interpreter.run(">00g@");
+        Stack<Integer> stack = interpreter.getStack();
+        assertEquals(1, stack.size());
+        assertEquals('>', stack.peek());
+    }
+
+    @Test
+    void shouldGetGetCommandForEmptyStack() {
+        interpreter.run("g@");
+        Stack<Integer> stack = interpreter.getStack();
+        assertEquals(1, stack.size());
+        assertEquals('g', stack.peek());
     }
 }

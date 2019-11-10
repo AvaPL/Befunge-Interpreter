@@ -18,7 +18,7 @@ public class BefungeInterpreter {
     }
 
     private boolean interpretCharacter() {
-        char character = codeArray.charAt(codePointer);
+        char character = codeArray.getCharAt(codePointer);
         return isStringMode ? interpretAsAscii(character) : interpretCommand(character);
     }
 
@@ -93,13 +93,13 @@ public class BefungeInterpreter {
                 outputAsAscii();
                 return true;
             case '#':
-                //TODO: Implement.
+                codePointer.increment();
                 return true;
             case 'p':
-                //TODO: Implement.
+                putCommand();
                 return true;
             case 'g':
-                //TODO: Implement.
+                getCommand();
                 return true;
             case '@':
                 return false;
@@ -110,67 +110,70 @@ public class BefungeInterpreter {
     }
 
     private void add() {
-        int a = stack.pop();
-        int b = stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(a + b);
     }
 
+    private Integer pop() {
+        return stack.isEmpty() ? 0 : stack.pop();
+    }
+
     private void subtract() {
-        int a = stack.pop();
-        int b = stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(b - a);
     }
 
     private void multiply() {
-        int a = stack.pop();
-        int b = stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(a * b);
     }
 
     private void divide() {
-        int a = stack.pop();
-        int b = stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(a == 0 ? 0 : b / a);
     }
 
     private void modulo() {
-        int a = stack.pop();
-        int b = stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(a == 0 ? 0 : b % a);
     }
 
     private void logicalNot() {
-        int value = stack.pop();
+        int value = pop();
         stack.push(value == 0 ? 1 : 0);
     }
 
     private void greaterThan() {
-        int a = stack.pop();
-        int b = stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(b > a ? 1 : 0);
     }
 
     private void duplicateLast() {
         if (stack.isEmpty())
             stack.push(0);
-        else
-            stack.push(stack.peek());
+        stack.push(stack.peek());
     }
 
     private void swapTop() {
-        int a = stack.pop();
-        int b = stack.isEmpty() ? 0 : stack.pop();
+        int a = pop();
+        int b = pop();
         stack.push(a);
         stack.push(b);
     }
 
     private void outputAsInt() {
-        String integer = stack.pop().toString();
+        String integer = pop().toString();
         output.append(integer);
     }
 
     private void outputAsAscii() {
-        char character = (char) stack.pop().intValue();
+        char character = (char) pop().intValue();
         output.append(character);
     }
 
@@ -180,13 +183,27 @@ public class BefungeInterpreter {
     }
 
     private void popAndMoveHorizontally() {
-        int value = stack.pop();
+        int value = pop();
         codePointer.setDirection(value == 0 ? CodePointer.Direction.RIGHT : CodePointer.Direction.LEFT);
     }
 
     private void popAndMoveVertically() {
-        int value = stack.pop();
+        int value = pop();
         codePointer.setDirection(value == 0 ? CodePointer.Direction.DOWN : CodePointer.Direction.UP);
+    }
+
+    private void putCommand() {
+        int row = pop();
+        int column = pop();
+        char command = (char) pop().intValue();
+        codeArray.setCharAt(row, column, command);
+    }
+
+    private void getCommand() {
+        int row = pop();
+        int column = pop();
+        char command = codeArray.getCharAt(row, column);
+        stack.push((int) command);
     }
 
     private void pushIfDigit(char character) {
