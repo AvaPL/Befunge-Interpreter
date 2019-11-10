@@ -21,6 +21,10 @@ public class CodePointer extends Point {
     private int maxX;
     private int maxY;
 
+    /**
+     * @param maxX Maximum x coordinate, exclusive.
+     * @param maxY Maximum y coordinate, exclusive.
+     */
     public CodePointer(int maxX, int maxY) {
         this.maxX = maxX;
         this.maxY = maxY;

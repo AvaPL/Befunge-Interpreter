@@ -10,11 +10,19 @@ public class BefungeInterpreter {
     private StringBuilder output = new StringBuilder();
 
     public String run(String code) {
+        setCode(code);
+        return run();
+    }
+
+    public void setCode(String code) {
         codeArray = CodeArray.of(code);
         codePointer = new CodePointer(codeArray.getColumnsNumber(), codeArray.getRowsNumber());
+    }
+
+    public String run() {
         while (interpretCharacter())
             codePointer.increment();
-        return output.toString();
+        return output();
     }
 
     private boolean interpretCharacter() {
@@ -168,6 +176,8 @@ public class BefungeInterpreter {
     }
 
     private void outputAsInt() {
+        /*TODO: According to language specification int should be followed by space.
+        *       It isn't respected in Codewars kata, will be fixed later.*/
         String integer = pop().toString();
         output.append(integer);
     }
@@ -211,9 +221,16 @@ public class BefungeInterpreter {
             stack.push(Character.getNumericValue(character));
     }
 
+    private String output() {
+        String outputString = output.toString();
+        output.setLength(0);
+        return outputString;
+    }
+
     public void reset() {
         stack.clear();
         codePointer.setLocation(0, 0);
+        isStringMode = false;
         output.setLength(0);
     }
 

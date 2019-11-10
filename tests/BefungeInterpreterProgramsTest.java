@@ -2,7 +2,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BefungeInterpreterProgramsTest {
 
@@ -11,6 +10,68 @@ class BefungeInterpreterProgramsTest {
     @BeforeEach
     void setUp() {
         interpreter = new BefungeInterpreter();
+    }
+
+    @Test
+    void shouldRunOnceWithoutReset() {
+        String output = interpreter.run("1.@");
+        assertEquals("1", output);
+        output = interpreter.run();
+        assertEquals("", output);
+    }
+
+    @Test
+    void shouldRunTwiceWithReset() {
+        String output = interpreter.run("1.@");
+        assertEquals("1", output);
+        interpreter.reset();
+        output = interpreter.run();
+        assertEquals("1", output);
+    }
+
+    @Test
+    void shouldRunTwiceWithoutReset() {
+        String output = interpreter.run("1.@");
+        assertEquals("1", output);
+        output = interpreter.run("2.@");
+        assertEquals("2", output);
+    }
+
+    @Test
+    void shouldRunTwiceWithoutResetWithSetCode() {
+        String output = interpreter.run("1.@");
+        assertEquals("1", output);
+        interpreter.setCode("2.@");
+        output = interpreter.run();
+        assertEquals("2", output);
+    }
+
+    @Test
+    void shouldRunTwiceWithDifferentCodeWithReset() {
+        String output = interpreter.run("1.@");
+        assertEquals("1", output);
+        interpreter.reset();
+        output = interpreter.run("2.@");
+        assertEquals("2", output);
+    }
+
+    @Test
+    void shouldRunTwiceWithResetAndSetCode() {
+        String output = interpreter.run("1.@");
+        assertEquals("1", output);
+        interpreter.reset();
+        interpreter.setCode("2.@");
+        output = interpreter.run();
+        assertEquals("2", output);
+    }
+
+    @Test
+    void shouldPreserveStackWithoutReset() {
+        String output = interpreter.run("143.@");
+        assertEquals("3", output);
+        interpreter.setCode("+.@");
+        output = interpreter.run();
+        assertEquals("5", output);
     }
 
     @Test
@@ -45,5 +106,22 @@ class BefungeInterpreterProgramsTest {
         //Source: http://www.quirkster.com/iano/js/befunge.html
         String output = interpreter.run(":0g,:93+`#@_1+");
         assertEquals(":0g,:93+`#@_1+", output);
+    }
+
+    @Test
+    void shouldPrintPrimeNumbers() {
+        //Source: http://www.quirkster.com/iano/js/befunge.html
+        String output = interpreter.run("2>:3g\" \"-!v\\  g30          <\n" +
+                                        " |!`\"O\":+1_:.:03p>03g+:\"O\"`|\n" +
+                                        " @               ^  p3\\\" \":<\n" +
+                                        "2 234567890123456789012345678901234567890123456789012345678901234567890123456789");
+        assertEquals("2357111317192329313741434753596167717379", output);
+    }
+
+    @Test
+    void shouldCopyItselfToOutput2() {
+        //Source: https://esolangs.org/wiki/Befunge
+        String output = interpreter.run("01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@");
+        assertEquals("01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@", output);
     }
 }
