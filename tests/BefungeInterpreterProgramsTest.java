@@ -75,6 +75,38 @@ class BefungeInterpreterProgramsTest {
     }
 
     @Test
+    void shouldCatOutputForSetInput() {
+        interpreter.setInput("a b c d e");
+        String output = interpreter.run("~:1+!#@_,");
+        assertEquals("abcde", output);
+    }
+
+    @Test
+    void shouldGiveSameOutputTwiceWithoutResetAndSetInput() {
+        interpreter.setInput("a b c a b c");
+        String output = interpreter.run("~~~,,,@");
+        assertEquals("cba", output);
+        output = interpreter.run("~~~,,,@");
+        assertEquals("cba", output);
+    }
+
+    @Test
+    void shouldOutputMinusOneInSecondOutputWithResetAndSetInput() {
+        interpreter.setInput("a b c a b c");
+        String output = interpreter.run("~~~,,,@");
+        assertEquals("cba", output);
+        interpreter.reset();
+        output = interpreter.run("~.@");
+        assertEquals("-1 ", output);
+    }
+
+    @Test
+    void shouldCatOutput() {
+        String output = interpreter.run("~:1+!#@_,", "a b c d e");
+        assertEquals("abcde", output);
+    }
+
+    @Test
     void shouldOutputContinuousDigits() {
         //Source: https://www.codewars.com/kata/526c7b931666d07889000a3c/train/java
         String output = interpreter.run(">987v>.v\nv456<  :\n>321 ^ _@");

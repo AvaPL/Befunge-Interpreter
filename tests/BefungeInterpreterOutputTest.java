@@ -57,9 +57,9 @@ class BefungeInterpreterOutputTest {
     }
 
     @Test
-    void shouldOutputNullAsciiCharacterForEmptyStack() {
+    void shouldOutputEmptyStringForEmptyStack() {
         String output = interpreter.run(",@");
-        assertEquals("\0", output);
+        assertEquals("", output);
     }
 
     @Test
